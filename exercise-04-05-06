@@ -1,0 +1,42 @@
+sequenceDiagram
+    participant browser
+    participant server
+
+    browser->>server: POST: https://studies.cs.helsinki.fi/exampleapp/spa
+
+        note right of browser: Recebe erro 304 ao abrir HTML
+    activate server
+    server-->>browser: Envia o ficheiro HTML
+        note left of server: Status 200 | Recebeu o HTML
+    deactivate server
+
+    browser->>server: POST: https://studies.cs.helsinki.fi/exampleapp/main.css
+    
+        note right of browser: Recebe erro 304 ao abrir CSS
+    activate server
+    server-->>browser: Mostra o ficheiro CSS
+        note left of server: Status | 200 Recebeu o CSS
+    deactivate server
+
+
+    browser ->>server: GET https://studies.cs.helsinki.fi/exampleapp/spa.js
+
+        Note right of browser: Recebe erro 304 ao abrir o ficheiro spa.
+    activate server
+    server -->>browser: Lê o ficheiro spa.js
+    deactivate server
+
+    Note right of browser: O navegador começa a executar o código JavaScript que busca o JSON do servidor
+
+    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/data.json
+    
+        Note right of browser: Recebe erro 404 se não aceder ao data.json.
+    activate server
+    server-->>browser: [{ content: "sending love from portugal !", date: "2026-02-23T14:48:32.032Z" }, ... ]
+    deactivate server
+
+
+    browser ->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+    Note left of server: Status 201 | Recebido
+    activate server
+    deactivate server
